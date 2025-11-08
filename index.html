@@ -1,13 +1,255 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>hi</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Profile — Your Name</title>
+    <meta name="description" content="Personal profile / resume. Replace placeholders with your details." />
+    <style>
+        :root{
+            --bg:#0f1724; --card:#0b1220; --muted:#9aa7bd; --accent:#7c5cff;
+            --glass: rgba(255,255,255,0.04);
+            --radius:12px; font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+        }
+        *{box-sizing:border-box}
+        html,body{height:100%}
+        body{
+            margin:0; background:linear-gradient(180deg,#061021 0%, #071529 60%);
+            color:#e6eef8; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+            padding:32px;
+        }
+
+        .wrap{max-width:980px;margin:0 auto;padding:24px; display:grid; grid-template-columns: 320px 1fr; gap:24px;}
+        @media (max-width:880px){ .wrap{grid-template-columns:1fr; padding:16px;} }
+
+        .card{
+            background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+            border-radius: var(--radius); padding:20px; box-shadow: 0 6px 18px rgba(2,6,23,0.6);
+            border:1px solid rgba(255,255,255,0.03);
+        }
+
+        /* LEFT COLUMN */
+        .profile{
+            display:flex; gap:16px; align-items:center;
+            background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));
+            padding:18px;border-radius:12px;
+        }
+        .avatar{
+            width:88px;height:88px;border-radius:14px;flex:0 0 88px;
+            display:grid;place-items:center;font-weight:700;font-size:28px;color:white;
+            background:linear-gradient(135deg,var(--accent),#2ad1d1);
+            box-shadow:0 6px 18px rgba(124,92,255,0.18), inset 0 -6px 18px rgba(255,255,255,0.02);
+        }
+        .meta h1{margin:0;font-size:20px}
+        .meta p{margin:6px 0 0;color:var(--muted);font-size:13px}
+
+        .bio{margin-top:14px;color:var(--muted);line-height:1.5;font-size:14px}
+        .tag{display:inline-block;margin-right:6px;margin-top:10px;padding:6px 8px;background:var(--glass);border-radius:999px;color:var(--muted);font-size:12px}
+
+        .skills{margin-top:14px}
+        .skill{margin-bottom:12px}
+        .skill label{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:6px}
+        .bar{
+            height:10px;background:rgba(255,255,255,0.04);border-radius:999px;overflow:hidden;
+        }
+        .bar > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),#2ad1d1);width:0%;transition:width 900ms cubic-bezier(.2,.9,.3,1)}
+
+        .contact{margin-top:18px;display:flex;flex-direction:column;gap:8px}
+        .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;background:transparent;border:1px solid rgba(255,255,255,0.06);border-radius:10px;color:var(--muted);text-decoration:none;font-size:13px}
+        .btn.primary{background:linear-gradient(90deg,var(--accent),#2ad1d1);color:white;border:none; box-shadow:0 6px 18px rgba(124,92,255,0.12)}
+
+        /* RIGHT COLUMN */
+        .right-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+        .right-head h2{margin:0}
+        .tagline{color:var(--muted);margin-top:6px;font-size:14px}
+
+        .section{margin-top:18px}
+        .section h3{margin:0 0 12px 0;font-size:15px}
+        .timeline{display:flex;flex-direction:column;gap:12px}
+        .job{background:var(--glass);padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.02)}
+        .job .row{display:flex;justify-content:space-between;align-items:center}
+        .job .title{font-weight:600}
+        .small{font-size:13px;color:var(--muted)}
+
+        .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+        @media (max-width:560px){ .grid{grid-template-columns:1fr} }
+
+        .project{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.02)}
+        .project h4{margin:0 0 6px 0}
+        .project p{margin:0;color:var(--muted);font-size:13px}
+
+        /* contact form */
+        form{display:grid;gap:10px}
+        input,textarea{background:transparent;border:1px solid rgba(255,255,255,0.04);padding:10px;border-radius:8px;color:inherit;font-size:14px}
+        textarea{min-height:100px;resize:vertical}
+        .muted{color:var(--muted);font-size:13px}
+        footer{margin-top:20px;color:var(--muted);font-size:13px;text-align:center}
+    </style>
 </head>
 <body>
-    <h1>hi
-        
-    </h1>
+    <main class="wrap">
+        <!-- LEFT COLUMN -->
+        <aside>
+            <div class="card profile">
+                <div class="avatar" aria-hidden="true">YN</div>
+                <div class="meta">
+                    <h1>Your Name</h1>
+                    <p class="muted">Full‑stack developer • UI/UX enthusiast</p>
+                    <div class="tagline muted">Location • Open to remote</div>
+                </div>
+            </div>
+
+            <div class="card bio" style="margin-top:14px">
+                <strong>About</strong>
+                <p class="muted" style="margin-top:8px">
+                    Concise professional summary: who you are, your focus, and what you bring. Replace this text with
+                    2–3 sentences highlighting strengths, industry experience, and goals.
+                </p>
+
+                <div class="skills">
+                    <div style="display:flex;justify-content:space-between;align-items:center">
+                        <strong>Skills</strong>
+                        <span class="muted">proficiency</span>
+                    </div>
+
+                    <div class="skill" data-percent="92">
+                        <label>HTML & CSS <span class="muted">92%</span></label>
+                        <div class="bar"><i></i></div>
+                    </div>
+                    <div class="skill" data-percent="86">
+                        <label>JavaScript <span class="muted">86%</span></label>
+                        <div class="bar"><i></i></div>
+                    </div>
+                    <div class="skill" data-percent="74">
+                        <label>React / Frameworks <span class="muted">74%</span></label>
+                        <div class="bar"><i></i></div>
+                    </div>
+                </div>
+
+                <div class="contact" style="margin-top:14px">
+                    <a class="btn primary" href="#" id="downloadCv">Download CV</a>
+                    <a class="btn" href="mailto:you@example.com">you@example.com</a>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top:14px">
+                <strong>Quick info</strong>
+                <div style="margin-top:8px" class="muted">
+                    <div><strong>Availability:</strong> Open to work</div>
+                    <div><strong>Languages:</strong> English, Spanish</div>
+                    <div><strong>Education:</strong> B.Sc. in Computer Science</div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- RIGHT COLUMN -->
+        <section>
+            <div class="card">
+                <div class="right-head">
+                    <div>
+                        <h2>Your Name</h2>
+                        <div class="tagline muted">Senior Web Developer building intuitive digital products. Focus: performance, accessibility, and delightful UI.</div>
+                    </div>
+                    <div style="text-align:right">
+                        <div class="muted">Experience: 6+ yrs</div>
+                        <div class="muted">Location: City, Country</div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>Experience</h3>
+                    <div class="timeline">
+                        <div class="job">
+                            <div class="row">
+                                <div>
+                                    <div class="title">Senior Frontend Developer — Company A</div>
+                                    <div class="small muted">2021 — Present</div>
+                                </div>
+                                <div class="small muted">Remote</div>
+                            </div>
+                            <p class="muted" style="margin-top:8px">Lead UI development, improved performance by 35%, and mentored junior engineers.</p>
+                        </div>
+
+                        <div class="job">
+                            <div class="row">
+                                <div>
+                                    <div class="title">Frontend Engineer — Company B</div>
+                                    <div class="small muted">2018 — 2021</div>
+                                </div>
+                                <div class="small muted">Hybrid</div>
+                            </div>
+                            <p class="muted" style="margin-top:8px">Built reusable component libraries and improved design system consistency.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>Selected projects</h3>
+                    <div class="grid">
+                        <div class="project">
+                            <h4>Project One</h4>
+                            <p class="muted">A web app that does X. Highlights: React, performance optimizations, strong UX.</p>
+                        </div>
+                        <div class="project">
+                            <h4>Project Two</h4>
+                            <p class="muted">E‑commerce redesign. Highlights: accessibility improvements and increased conversions.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>Contact</h3>
+                    <form id="contactForm">
+                        <input type="text" name="name" placeholder="Your name" required />
+                        <input type="email" name="email" placeholder="Email" required />
+                        <input type="text" name="subject" placeholder="Subject" />
+                        <textarea name="message" placeholder="Message" required></textarea>
+                        <div style="display:flex;gap:8px">
+                            <button type="submit" class="btn primary">Send message</button>
+                            <button type="button" id="clearBtn" class="btn">Clear</button>
+                        </div>
+                        <div id="formStatus" class="muted" aria-live="polite" style="margin-top:6px"></div>
+                    </form>
+                </div>
+            </div>
+
+            <footer>
+                Built with care • Customize this file at /c:/Users/hanajibreen/OneDrive/Desktop/MyProject!/bro.html
+            </footer>
+        </section>
+    </main>
+
+    <script>
+        // Animate skill bars on load
+        document.addEventListener('DOMContentLoaded', function(){
+            document.querySelectorAll('.skill').forEach(function(el, i){
+                var pct = el.getAttribute('data-percent') || 60;
+                setTimeout(function(){
+                    el.querySelector('i').style.width = pct + '%';
+                }, 150 + i*120);
+            });
+
+            // Contact form behaviour (client-side only)
+            var form = document.getElementById('contactForm');
+            var status = document.getElementById('formStatus');
+            form.addEventListener('submit', function(e){
+                e.preventDefault();
+                status.textContent = 'Sending...';
+                // Simulate send
+                setTimeout(function(){
+                    status.textContent = 'Thanks — your message was received (this is a demo).';
+                    form.reset();
+                }, 900);
+            });
+            document.getElementById('clearBtn').addEventListener('click', function(){ form.reset(); status.textContent = ''; });
+
+            // CV download placeholder (replace href with actual resume file path)
+            document.getElementById('downloadCv').addEventListener('click', function(e){
+                // In production, set link to actual resume PDF; this demo prevents navigation.
+                e.preventDefault();
+                alert('Replace this with a link to your CV (e.g., /assets/your-cv.pdf).');
+            });
+        });
+    </script>
 </body>
-</html>
+</html></div>
