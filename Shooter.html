@@ -1,381 +1,350 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Neon Block Shooter</title>
 <style>
-    body {
-        background: #181c24;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        margin: 0;
-        font-family: 'Segoe UI', Arial, sans-serif;
-        overflow: hidden;
-        touch-action: none;
-    }
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #181c24;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  overflow: hidden;
+  touch-action: none;
+}
 
-    #game-container {
-        background: #232a34;
-        border-radius: 16px;
-        box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-        padding: 24px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        position: relative;
-        gap: 12px;
-        width: 90vw;
-        max-width: 420px;
-    }
+#game-container {
+  position: relative;
+  background: #232a34;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  overflow: hidden;
+}
 
-    #score {
-        color: #fff;
-        font-size: 1.3rem;
-        font-weight: bold;
-        text-shadow: 0 2px 8px #0004;
-    }
+#score {
+  color: white;
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-shadow: 0 0 8px #00eaff88;
+}
 
-    #game-canvas {
-        background: linear-gradient(180deg, #2d3546 0%, #1a1e26 100%);
-        border-radius: 12px;
-        box-shadow: 0 4px 16px #0006;
-        display: block;
-        transition: box-shadow 0.2s;
-        width: 100%;
-        height: auto;
-    }
+#game-canvas {
+  border-radius: 12px;
+  background: linear-gradient(180deg, #2d3546 0%, #1a1e26 100%);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+  touch-action: none;
+}
 
-    #game-canvas.shoot {
-        box-shadow: 0 0 32px 8px #00eaff88;
-    }
+button {
+  background: linear-gradient(90deg, #00eaff 0%, #0077ff 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 32px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 2px 8px #00eaff44;
+  transition: all 0.2s ease;
+}
 
-    button {
-        background: linear-gradient(90deg, #00eaff 0%, #0077ff 100%);
-        color: #fff;
-        border: none;
-        border-radius: 8px;
-        padding: 12px 32px;
-        font-size: 1.1rem;
-        font-weight: bold;
-        cursor: pointer;
-        box-shadow: 0 2px 8px #00eaff44;
-        transition: background 0.2s, transform 0.1s;
-    }
+button:hover {
+  transform: scale(1.05);
+  background: linear-gradient(90deg, #0077ff 0%, #00eaff 100%);
+}
 
-    button:hover {
-        background: linear-gradient(90deg, #0077ff 0%, #00eaff 100%);
-        transform: scale(1.05);
-    }
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(24, 28, 36, 0.97);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  text-align: center;
+  transition: opacity 0.4s ease;
+}
 
-    /* Overlay base */
-    .overlay {
-        position: absolute;
-        inset: 0;
-        background: rgba(24, 28, 36, 0.96);
-        border-radius: 16px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        gap: 20px;
-        transition: opacity 0.4s ease;
-        text-align: center;
-        padding: 20px;
-    }
+.overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
 
-    .hidden {
-        opacity: 0;
-        pointer-events: none;
-    }
+h1, h2 {
+  color: #00eaff;
+  text-shadow: 0 0 12px #00eaff99;
+  margin: 0;
+}
 
-    h1, h2 {
-        color: #00eaff;
-        text-shadow: 0 0 12px #00eaff66;
-        margin: 0;
-    }
+p {
+  color: #ccc;
+  font-size: 1rem;
+  max-width: 280px;
+  line-height: 1.4;
+}
 
-    p {
-        color: #ccc;
-        max-width: 280px;
-        font-size: 1rem;
-    }
+.menu-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
 
-    .menu-buttons {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-    }
+/* Floating music button */
+#music-btn {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: rgba(0, 234, 255, 0.15);
+  border: 1px solid #00eaff55;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  color: #00eaff;
+  box-shadow: 0 0 8px #00eaff44;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+#music-btn:hover {
+  transform: scale(1.1);
+  background: rgba(0, 234, 255, 0.25);
+}
 
-    #final-score {
-        color: #00eaff;
-        font-weight: bold;
-    }
-
-    /* Mobile touch controls */
-    #touch-controls {
-        display: none;
-        justify-content: center;
-        gap: 10px;
-        margin-top: 12px;
-    }
-
-    .touch-btn {
-        background: rgba(0, 234, 255, 0.15);
-        border: 1px solid rgba(0,234,255,0.3);
-        color: #00eaff;
-        border-radius: 8px;
-        padding: 10px 20px;
-        font-weight: bold;
-        font-size: 1rem;
-        user-select: none;
-    }
-
-    @media (max-width: 640px) {
-        #touch-controls {
-            display: flex;
-        }
-    }
+/* Touch zones */
+.touch-zone {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  opacity: 0;
+  z-index: 2;
+}
+#left-zone { left: 0; }
+#right-zone { right: 0; }
 </style>
 </head>
 <body>
 <div id="game-container">
-    <div id="score">Score: 0</div>
-    <canvas id="game-canvas" width="400" height="600"></canvas>
+  <div id="score">Score: 0</div>
+  <canvas id="game-canvas" width="400" height="600"></canvas>
+  <div id="music-btn" title="Toggle Music">🔊</div>
 
-    <!-- Main Menu -->
-    <div id="menu" class="overlay">
-        <h1>Neon Block Shooter</h1>
-        <p>Move: <b>A/D</b> or arrows<br>Shoot: <b>F</b> or tap 🔫<br>Destroy blocks before they reach you!</p>
-        <div class="menu-buttons">
-            <button id="play-btn">Start Game</button>
-            <button id="exit-btn">Return to Index</button>
-        </div>
+  <!-- Main Menu -->
+  <div id="menu" class="overlay">
+    <h1>Neon Block Shooter</h1>
+    <p>Use <b>A</b>/<b>D</b> or tap sides to move.<br>Tap or press <b>F</b> to shoot.</p>
+    <div class="menu-buttons">
+      <button id="play-btn">Start Game</button>
+      <button id="exit-btn">Return to Index</button>
     </div>
+  </div>
 
-    <!-- Game Over Screen -->
-    <div id="game-over" class="overlay hidden">
-        <h2>Game Over</h2>
-        <p id="final-score">Score: 0</p>
-        <div class="menu-buttons">
-            <button id="restart-btn">Restart</button>
-            <button id="back-menu-btn">Back to Menu</button>
-            <button id="exit-btn-over">Return to Index</button>
-        </div>
+  <!-- Game Over -->
+  <div id="game-over" class="overlay hidden">
+    <h2>Game Over</h2>
+    <p id="final-score">Score: 0</p>
+    <div class="menu-buttons">
+      <button id="restart-btn">Restart</button>
+      <button id="menu-btn">Back to Menu</button>
+      <button id="exit-btn-over">Return to Index</button>
     </div>
+  </div>
 
-    <!-- Touch Controls -->
-    <div id="touch-controls">
-        <div class="touch-btn" id="left-btn">◀</div>
-        <div class="touch-btn" id="shoot-btn">🔫</div>
-        <div class="touch-btn" id="right-btn">▶</div>
-    </div>
+  <!-- Touch controls -->
+  <div id="left-zone" class="touch-zone"></div>
+  <div id="right-zone" class="touch-zone"></div>
 </div>
 
 <script>
-const canvas = document.getElementById('game-canvas');
-const ctx = canvas.getContext('2d');
-const scoreEl = document.getElementById('score');
-const menu = document.getElementById('menu');
-const gameOverScreen = document.getElementById('game-over');
-const playBtn = document.getElementById('play-btn');
-const restartBtn = document.getElementById('restart-btn');
-const backMenuBtn = document.getElementById('back-menu-btn');
-const finalScoreEl = document.getElementById('final-score');
-const exitBtns = [document.getElementById('exit-btn'), document.getElementById('exit-btn-over')];
+const canvas = document.getElementById("game-canvas");
+const ctx = canvas.getContext("2d");
+const scoreEl = document.getElementById("score");
+const menu = document.getElementById("menu");
+const gameOverScreen = document.getElementById("game-over");
+const playBtn = document.getElementById("play-btn");
+const restartBtn = document.getElementById("restart-btn");
+const menuBtn = document.getElementById("menu-btn");
+const finalScoreEl = document.getElementById("final-score");
+const exitBtns = [document.getElementById("exit-btn"), document.getElementById("exit-btn-over")];
+const leftZone = document.getElementById("left-zone");
+const rightZone = document.getElementById("right-zone");
+const musicBtn = document.getElementById("music-btn");
 
-const player = {
-    x: canvas.width / 2 - 25,
-    y: canvas.height - 60,
-    width: 50,
-    height: 20,
-    color: '#00eaff',
-    speed: 6
+const music = new Audio("https://cdn.pixabay.com/download/audio/2022/10/03/audio_68a18c9e65.mp3?filename=arcade-game-music-loop-112191.mp3");
+music.loop = true;
+music.volume = 0.3;
+let musicMuted = false;
+
+musicBtn.onclick = () => {
+  musicMuted = !musicMuted;
+  if (musicMuted) {
+    musicBtn.textContent = "🔇";
+    fadeOutMusic();
+  } else {
+    musicBtn.textContent = "🔊";
+    playMusic();
+  }
 };
 
+function playMusic() {
+  if (musicMuted) return;
+  music.play().catch(()=>{});
+}
+
+function fadeOutMusic() {
+  let vol = music.volume;
+  const fade = setInterval(() => {
+    vol -= 0.05;
+    music.volume = Math.max(vol, 0);
+    if (vol <= 0) {
+      clearInterval(fade);
+      music.pause();
+    }
+  }, 80);
+}
+
+const player = { x: 175, y: 540, width: 50, height: 20, speed: 7 };
 let bullets = [];
 let blocks = [];
 let score = 0;
 let gameActive = false;
-let animationId = null;
-let blockSpawnTimer = null;
 let leftPressed = false, rightPressed = false;
-let canShoot = true;
-
-function drawPlayer() {
-    ctx.save();
-    ctx.shadowColor = "#00eaff";
-    ctx.shadowBlur = 16;
-    ctx.fillStyle = player.color;
-    ctx.fillRect(player.x, player.y, player.width, player.height);
-    ctx.restore();
-}
-
-function drawBullets() {
-    bullets.forEach(bullet => {
-        ctx.save();
-        ctx.shadowColor = "#fff";
-        ctx.shadowBlur = 8;
-        ctx.fillStyle = "#fff";
-        ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
-        ctx.restore();
-    });
-}
-
-function drawBlocks() {
-    blocks.forEach(block => {
-        ctx.save();
-        ctx.globalAlpha = block.hitAnim ? 0.6 : 1;
-        ctx.shadowColor = "#ff3c6e";
-        ctx.shadowBlur = block.hitAnim ? 16 : 0;
-        ctx.fillStyle = block.color;
-        ctx.fillRect(block.x, block.y, block.width, block.height);
-        ctx.restore();
-    });
-}
+let spawnTimer = 0;
+let lastTime = 0;
 
 function spawnBlock() {
-    const blockWidth = 60;
-    const blockHeight = 30;
-    const x = Math.random() * (canvas.width - blockWidth);
-    const color = `hsl(${Math.random()*360}, 80%, 60%)`;
-    blocks.push({ x, y: -blockHeight, width: blockWidth, height: blockHeight, color, hitAnim: false });
-}
-
-function update() {
-    bullets.forEach(bullet => bullet.y -= bullet.speed);
-    bullets = bullets.filter(bullet => bullet.y + bullet.height > 0);
-
-    blocks.forEach(block => block.y += 2 + score * 0.02);
-    blocks = blocks.filter(block => block.y < canvas.height);
-
-    bullets.forEach((bullet, bi) => {
-        blocks.forEach((block, blki) => {
-            if (bullet.x < block.x + block.width &&
-                bullet.x + bullet.width > block.x &&
-                bullet.y < block.y + block.height &&
-                bullet.y + bullet.height > block.y) {
-                block.hitAnim = true;
-                setTimeout(() => block.hitAnim = false, 100);
-                bullets.splice(bi, 1);
-                blocks.splice(blki, 1);
-                score++;
-                scoreEl.textContent = "Score: " + score;
-            }
-        });
-    });
-
-    for (let block of blocks) {
-        if (block.y + block.height > player.y &&
-            block.x < player.x + player.width &&
-            block.x + block.width > player.x) {
-            gameOver();
-            return;
-        }
-    }
-}
-
-function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawPlayer();
-    drawBullets();
-    drawBlocks();
-}
-
-function loop() {
-    update();
-    draw();
-    if (gameActive) animationId = requestAnimationFrame(loop);
+  const width = 60, height = 30;
+  const x = Math.random() * (canvas.width - width);
+  const color = `hsl(${Math.random()*360}, 80%, 60%)`;
+  blocks.push({ x, y: -height, width, height, color });
 }
 
 function shoot() {
-    if (!canShoot) return;
-    canShoot = false;
-    bullets.push({
-        x: player.x + player.width / 2 - 4,
-        y: player.y - 12,
-        width: 8,
-        height: 16,
-        speed: 10
+  bullets.push({ x: player.x + player.width/2 - 4, y: player.y - 16, width: 8, height: 16, speed: 10 });
+}
+
+function update(dt) {
+  if (leftPressed) player.x -= player.speed * dt;
+  if (rightPressed) player.x += player.speed * dt;
+  player.x = Math.max(0, Math.min(canvas.width - player.width, player.x));
+
+  bullets.forEach(b => b.y -= b.speed * dt * 60);
+  bullets = bullets.filter(b => b.y > -20);
+
+  blocks.forEach(b => b.y += (2 + score * 0.02) * dt * 60);
+  blocks = blocks.filter(b => b.y < canvas.height + 50);
+
+  bullets.forEach((b, bi) => {
+    blocks.forEach((bl, blki) => {
+      if (b.x < bl.x + bl.width && b.x + b.width > bl.x && b.y < bl.y + bl.height && b.y + b.height > bl.y) {
+        bullets.splice(bi, 1);
+        blocks.splice(blki, 1);
+        score++;
+        scoreEl.textContent = "Score: " + score;
+      }
     });
-    canvas.classList.add('shoot');
-    setTimeout(() => {
-        canvas.classList.remove('shoot');
-        canShoot = true;
-    }, 200);
-}
+  });
 
-function resetGame() {
-    bullets = [];
-    blocks = [];
-    score = 0;
-    scoreEl.textContent = "Score: 0";
-    player.x = canvas.width / 2 - player.width / 2;
-}
+  if (blocks.some(b => b.y + b.height >= player.y && b.x < player.x + player.width && b.x + b.width > player.x)) {
+    endGame();
+  }
 
-function movePlayer() {
-    if (leftPressed) player.x -= player.speed;
-    if (rightPressed) player.x += player.speed;
-    player.x = Math.max(0, Math.min(canvas.width - player.width, player.x));
-}
-
-function blockSpawner() {
-    if (!gameActive) return;
+  spawnTimer += dt * 60;
+  if (spawnTimer > Math.max(60 - score, 20)) {
     spawnBlock();
-    let interval = Math.max(600 - score * 8, 150);
-    blockSpawnTimer = setTimeout(blockSpawner, interval);
+    spawnTimer = 0;
+  }
 }
 
-function gameOver() {
-    gameActive = false;
-    cancelAnimationFrame(animationId);
-    clearTimeout(blockSpawnTimer);
-    finalScoreEl.textContent = "Score: " + score;
-    gameOverScreen.classList.remove('hidden');
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "#00eaff";
+  ctx.shadowColor = "#00eaff";
+  ctx.shadowBlur = 10;
+  ctx.fillRect(player.x, player.y, player.width, player.height);
+  ctx.shadowBlur = 0;
+  ctx.fillStyle = "#fff";
+  bullets.forEach(b => ctx.fillRect(b.x, b.y, b.width, b.height));
+  blocks.forEach(b => {
+    ctx.fillStyle = b.color;
+    ctx.fillRect(b.x, b.y, b.width, b.height);
+  });
+}
+
+function loop(timestamp) {
+  if (!gameActive) return;
+  const dt = (timestamp - lastTime) / 1000 || 0.016;
+  lastTime = timestamp;
+  update(dt);
+  draw();
+  requestAnimationFrame(loop);
 }
 
 function startGame() {
-    resetGame();
-    gameActive = true;
-    menu.classList.add('hidden');
-    gameOverScreen.classList.add('hidden');
-    loop();
-    blockSpawner();
+  score = 0;
+  bullets = [];
+  blocks = [];
+  player.x = 175;
+  scoreEl.textContent = "Score: 0";
+  menu.classList.add("hidden");
+  gameOverScreen.classList.add("hidden");
+  gameActive = true;
+  playMusic();
+  lastTime = performance.now();
+  requestAnimationFrame(loop);
 }
 
-function returnToMenu() {
-    resetGame();
-    menu.classList.remove('hidden');
-    gameOverScreen.classList.add('hidden');
+function endGame() {
+  gameActive = false;
+  finalScoreEl.textContent = "Score: " + score;
+  gameOverScreen.classList.remove("hidden");
 }
 
-document.addEventListener('keydown', e => {
-    if (e.code === 'KeyA' || e.code === 'ArrowLeft') leftPressed = true;
-    if (e.code === 'KeyD' || e.code === 'ArrowRight') rightPressed = true;
-    if ((e.code === 'KeyF' || e.code === 'Space' || e.code === 'ArrowUp') && gameActive) shoot();
-});
-document.addEventListener('keyup', e => {
-    if (e.code === 'KeyA' || e.code === 'ArrowLeft') leftPressed = false;
-    if (e.code === 'KeyD' || e.code === 'ArrowRight') rightPressed = false;
-});
+function backToMenu() {
+  gameActive = false;
+  menu.classList.remove("hidden");
+  gameOverScreen.classList.add("hidden");
+}
 
-setInterval(() => {
-    if (gameActive) movePlayer();
-}, 16);
+// Controls
+document.addEventListener("keydown", e => {
+  if (e.code === "KeyA") leftPressed = true;
+  if (e.code === "KeyD") rightPressed = true;
+  if ((e.code === "KeyF" || e.code === "Space") && gameActive) shoot();
+});
+document.addEventListener("keyup", e => {
+  if (e.code === "KeyA") leftPressed = false;
+  if (e.code === "KeyD") rightPressed = false;
+});
 
 // Touch controls
-document.getElementById('left-btn').addEventListener('touchstart', () => leftPressed = true);
-document.getElementById('left-btn').addEventListener('touchend', () => leftPressed = false);
-document.getElementById('right-btn').addEventListener('touchstart', () => rightPressed = true);
-document.getElementById('right-btn').addEventListener('touchend', () => rightPressed = false);
-document.getElementById('shoot-btn').addEventListener('touchstart', () => { if (gameActive) shoot(); });
+[leftZone, rightZone, canvas].forEach(zone => {
+  zone.addEventListener("touchstart", e => e.preventDefault(), { passive: false });
+});
+leftZone.addEventListener("touchstart", e => { e.preventDefault(); leftPressed = true; });
+leftZone.addEventListener("touchend", e => { e.preventDefault(); leftPressed = false; });
+rightZone.addEventListener("touchstart", e => { e.preventDefault(); rightPressed = true; });
+rightZone.addEventListener("touchend", e => { e.preventDefault(); rightPressed = false; });
+canvas.addEventListener("touchstart", e => { e.preventDefault(); if (gameActive) shoot(); });
 
 // Buttons
 playBtn.onclick = startGame;
 restartBtn.onclick = startGame;
-backMenuBtn.onclick = returnToMenu;
+menuBtn.onclick = backToMenu;
 exitBtns.forEach(btn => btn.onclick = () => window.location.href = "index.html");
 </script>
 </body>
