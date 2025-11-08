@@ -206,7 +206,9 @@
                 <div class="section">
                     <h3>Memory projects</h3>
                     <div class="grid">
-    <div class="project">
+
+    <!-- Shooter Game Project -->
+    <div class="project fade-in">
         <h4>Shooter Game</h4>
         <p class="muted">A fun browser shooter made with HTML, CSS, and JavaScript.</p>
 
@@ -218,6 +220,9 @@
             margin-top:8px;
             box-shadow:0 4px 12px rgba(0,0,0,0.3);
             border:1px solid rgba(255,255,255,0.05);
+            opacity:0;
+            transform:translateY(15px);
+            animation: fadeIn 1.5s ease forwards;
         ">
             <iframe 
                 src="Shooter.html"
@@ -236,6 +241,15 @@
         <a href="Shooter.html" class="btn primary" style="margin-top:12px;display:inline-block;text-align:center;">
             ▶ Play Full Game
         </a>
+    </div>
+
+    <!-- Coming Soon Project -->
+    <div class="project fade-in" style="animation-delay:0.4s;">
+        <h4>???</h4>
+        <p class="muted">Coming Soon.</p>
+    </div>
+
+</div>
     </div>
 </div>
                 </div>
@@ -281,6 +295,24 @@
                 });
             }
         });
+
+        @keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    opacity: 0;
+    animation: fad
+        
     </script>
+
+    
 </body>
 </html>
