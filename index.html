@@ -3,19 +3,27 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Profile — By Kibal</title>
+    <title>Profile — Kibal</title>
     <meta name="description" content="Personal profile / resume. Replace placeholders with your details." />
     <style>
         :root{
-            --bg:#0f1724; --card:#0b1220; --muted:#9aa7bd; --accent:#7c5cff;
+            /* red-themed, consistent palette */
+            --bg-start:#190606;    /* deep burgundy */
+            --bg-end:#2d0c0c;      /* slightly lighter burgundy */
+            --card:rgba(11,18,32,0.7);
+            --muted:#c9a9a9;
+            --accent1:#ff3b30;     /* vivid red */
+            --accent2:#ff6b6b;     /* lighter red */
             --glass: rgba(255,255,255,0.04);
-            --radius:12px; font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+            --radius:12px;
+            font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
         }
         *{box-sizing:border-box}
         html,body{height:100%}
         body{
-            margin:0; background:linear-gradient(180deg,#061021 0%, #071529 60%);
-            color:#e6eef8; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+            margin:0;
+            background: linear-gradient(180deg, var(--bg-start) 0%, var(--bg-end) 60%);
+            color:#f6eaea; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
             padding:32px;
         }
 
@@ -26,6 +34,7 @@
             background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
             border-radius: var(--radius); padding:20px; box-shadow: 0 6px 18px rgba(2,6,23,0.6);
             border:1px solid rgba(255,255,255,0.03);
+            backdrop-filter: blur(6px);
         }
 
         /* LEFT COLUMN */
@@ -37,8 +46,8 @@
         .avatar{
             width:88px;height:88px;border-radius:14px;flex:0 0 88px;
             display:grid;place-items:center;font-weight:700;font-size:28px;color:white;
-            background:linear-gradient(135deg,var(--accent),#2ad1d1);
-            box-shadow:0 6px 18px rgba(124,92,255,0.18), inset 0 -6px 18px rgba(255,255,255,0.02);
+            background:linear-gradient(135deg,var(--accent1),var(--accent2));
+            box-shadow:0 6px 18px rgba(255,59,48,0.18), inset 0 -6px 18px rgba(255,255,255,0.02);
         }
         .meta h1{margin:0;font-size:20px}
         .meta p{margin:6px 0 0;color:var(--muted);font-size:13px}
@@ -52,11 +61,11 @@
         .bar{
             height:10px;background:rgba(255,255,255,0.04);border-radius:999px;overflow:hidden;
         }
-        .bar > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),#2ad1d1);width:0%;transition:width 900ms cubic-bezier(.2,.9,.3,1)}
+        .bar > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent1),var(--accent2));width:0%;transition:width 900ms cubic-bezier(.2,.9,.3,1)}
 
         .contact{margin-top:18px;display:flex;flex-direction:column;gap:8px}
         .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;background:transparent;border:1px solid rgba(255,255,255,0.06);border-radius:10px;color:var(--muted);text-decoration:none;font-size:13px}
-        .btn.primary{background:linear-gradient(90deg,var(--accent),#2ad1d1);color:white;border:none; box-shadow:0 6px 18px rgba(124,92,255,0.12)}
+        .btn.primary{background:linear-gradient(90deg,var(--accent1),var(--accent2));color:white;border:none; box-shadow:0 6px 18px rgba(255,59,48,0.12)}
 
         /* RIGHT COLUMN */
         .right-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
@@ -91,10 +100,10 @@
         <!-- LEFT COLUMN -->
         <aside>
             <div class="card profile">
-                <div class="avatar" aria-hidden="true">😋</div>
+                <div class="avatar" aria-hidden="true">🤯</div>
                 <div class="meta">
                     <h1>KIBAL</h1>
-                    <p class="muted">Begineer Developer :)</p>
+                    <p class="muted">Beginner Developer :)</p>
                     <div class="tagline muted">#Ilovecodesomething</div>
                 </div>
             </div>
@@ -102,7 +111,7 @@
             <div class="card bio" style="margin-top:14px">
                 <strong>About</strong>
                 <p class="muted" style="margin-top:8px">
-                    HI! i am a young developer that are so interested in coding and learning new things about programming languages and web development. I love to create beautiful and functional web applications also python projects :D.
+                    HI! I am a young developer interested in coding and learning new things about programming and web development. I love to create beautiful and functional web applications and Python projects.
                 </p>
 
                 <div class="skills">
@@ -120,7 +129,7 @@
                         <div class="bar"><i></i></div>
                     </div>
                     <div class="skill" data-percent="56">
-                        <label>JavaScripts<span class="muted">56%</span></label>
+                        <label>JavaScript <span class="muted">56%</span></label>
                         <div class="bar"><i></i></div>
                     </div>
                 </div>
@@ -131,10 +140,11 @@
 
             <div class="card" style="margin-top:14px">
                 <strong>Quick info</strong>
-                <div style="margin-top:8px" class="muted">
+                <div style="margin-top:8px" class="muted"></div>
                     <div><strong>Availability:</strong> Busy ;-;</div>
-                    <div><strong>Languages:</strong> English, Indonesia</div>
-                    <div><strong>Education:</strong> Middle Schools </div>
+                    <div><strong>Languages:</strong> English, Indonesian</div>
+                    <div><strong>Education:</strong> Middle School </div>
+                    <div><strong>Hobbies:</strong> Coding, Games, Chess </div>
                 </div>
             </div>
         </aside>
@@ -145,7 +155,7 @@
                 <div class="right-head">
                     <div>
                         <h2>Kibal :D</h2>
-                        <div class="tagline muted">Begineer Developer building imaginary of things.</div>
+                        <div class="tagline muted">Beginner Developer building imaginary things.</div>
                     </div>
                     <div style="text-align:right">
                         <div class="muted">Experience: 2+ yrs</div>
@@ -177,27 +187,32 @@
                 }, 150 + i*120);
             });
 
-            // Contact form behaviour (client-side only)
+            // Defensive event bindings (only if elements exist)
             var form = document.getElementById('contactForm');
             var status = document.getElementById('formStatus');
-            form.addEventListener('submit', function(e){
-                e.preventDefault();
-                status.textContent = 'Sending...';
-                // Simulate send
-                setTimeout(function(){
-                    status.textContent = 'Thanks — your message was received (this is a demo).';
-                    form.reset();
-                }, 900);
-            });
-            document.getElementById('clearBtn').addEventListener('click', function(){ form.reset(); status.textContent = ''; });
+            if (form && status) {
+                form.addEventListener('submit', function(e){
+                    e.preventDefault();
+                    status.textContent = 'Sending...';
+                    setTimeout(function(){
+                        status.textContent = 'Thanks — your message was received (this is a demo).';
+                        form.reset();
+                    }, 900);
+                });
+            }
+            var clearBtn = document.getElementById('clearBtn');
+            if (clearBtn && form) {
+                clearBtn.addEventListener('click', function(){ form.reset(); if(status) status.textContent=''; });
+            }
 
-            // CV download placeholder (replace href with actual resume file path)
-            document.getElementById('downloadCv').addEventListener('click', function(e){
-                // In production, set link to actual resume PDF; this demo prevents navigation.
-                e.preventDefault();
-                alert('Replace this with a link to your CV (e.g., /assets/your-cv.pdf).');
-            });
+            var downloadCv = document.getElementById('downloadCv');
+            if (downloadCv) {
+                downloadCv.addEventListener('click', function(e){
+                    e.preventDefault();
+                    alert('Replace this with a link to your CV (e.g., /assets/your-cv.pdf).');
+                });
+            }
         });
     </script>
 </body>
-</html></div>
+</html>
