@@ -41,7 +41,6 @@ body {
   border-radius: 12px;
   background: linear-gradient(180deg, #2d3546 0%, #1a1e26 100%);
   box-shadow: 0 4px 16px rgba(0,0,0,0.5);
-  touch-action: none;
 }
 
 button {
@@ -55,6 +54,7 @@ button {
   cursor: pointer;
   box-shadow: 0 2px 8px #00eaff44;
   transition: all 0.2s ease;
+  z-index: 5;
 }
 
 button:hover {
@@ -74,6 +74,7 @@ button:hover {
   gap: 16px;
   text-align: center;
   transition: opacity 0.4s ease;
+  z-index: 4;
 }
 
 .overlay.hidden {
@@ -118,13 +119,14 @@ p {
   box-shadow: 0 0 8px #00eaff44;
   cursor: pointer;
   transition: all 0.2s ease;
+  z-index: 6;
 }
 #music-btn:hover {
   transform: scale(1.1);
   background: rgba(0, 234, 255, 0.25);
 }
 
-/* Touch zones */
+/* Touch zones (disabled by default) */
 .touch-zone {
   position: absolute;
   top: 0;
@@ -132,6 +134,7 @@ p {
   width: 50%;
   opacity: 0;
   z-index: 2;
+  pointer-events: none;
 }
 #left-zone { left: 0; }
 #right-zone { right: 0; }
@@ -184,7 +187,7 @@ const leftZone = document.getElementById("left-zone");
 const rightZone = document.getElementById("right-zone");
 const musicBtn = document.getElementById("music-btn");
 
-const music = new Audio("https://cdn.pixabay.com/download/audio/2022/10/03/audio_68a18c9e65.mp3?filename=arcade-game-music-loop-112191.mp3");
+const music = new Audio("Music.mp3");
 music.loop = true;
 music.volume = 0.3;
 let musicMuted = false;
@@ -201,10 +204,8 @@ musicBtn.onclick = () => {
 };
 
 function playMusic() {
-  if (musicMuted) return;
-  music.play().catch(()=>{});
+  if (!musicMuted) music.play().catch(()=>{});
 }
-
 function fadeOutMusic() {
   let vol = music.volume;
   const fade = setInterval(() => {
@@ -213,6 +214,7 @@ function fadeOutMusic() {
     if (vol <= 0) {
       clearInterval(fade);
       music.pause();
+      music.volume = 0.3;
     }
   }, 80);
 }
@@ -238,8 +240,8 @@ function shoot() {
 }
 
 function update(dt) {
-  if (leftPressed) player.x -= player.speed * dt;
-  if (rightPressed) player.x += player.speed * dt;
+  if (leftPressed) player.x -= player.speed * dt * 60;
+  if (rightPressed) player.x += player.speed * dt * 60;
   player.x = Math.max(0, Math.min(canvas.width - player.width, player.x));
 
   bullets.forEach(b => b.y -= b.speed * dt * 60);
@@ -303,6 +305,7 @@ function startGame() {
   menu.classList.add("hidden");
   gameOverScreen.classList.add("hidden");
   gameActive = true;
+  enableTouchZones(true);
   playMusic();
   lastTime = performance.now();
   requestAnimationFrame(loop);
@@ -310,14 +313,22 @@ function startGame() {
 
 function endGame() {
   gameActive = false;
+  enableTouchZones(false);
   finalScoreEl.textContent = "Score: " + score;
   gameOverScreen.classList.remove("hidden");
 }
 
 function backToMenu() {
   gameActive = false;
+  enableTouchZones(false);
   menu.classList.remove("hidden");
   gameOverScreen.classList.add("hidden");
+}
+
+function enableTouchZones(enable) {
+  const state = enable ? "auto" : "none";
+  leftZone.style.pointerEvents = state;
+  rightZone.style.pointerEvents = state;
 }
 
 // Controls
